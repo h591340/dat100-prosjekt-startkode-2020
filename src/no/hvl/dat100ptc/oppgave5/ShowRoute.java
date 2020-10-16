@@ -53,11 +53,14 @@ public class ShowRoute extends EasyGraphics {
 	// antall y-pixels per breddegrad
 	public double ystep() {
 	
-		double ystep;
 		
 		// TODO - START
-		
-		throw new UnsupportedOperationException(TODO.method());
+		double maxlat = GPSUtils.findMax(GPSUtils.getLatitudes(gpspoints));
+		double minlat = GPSUtils.findMin(GPSUtils.getLatitudes(gpspoints));
+
+		double ystep = MAPYSIZE / (Math.abs(maxlat - minlat)); 
+
+		return ystep;
 
 		// TODO - SLUTT
 		
@@ -65,10 +68,14 @@ public class ShowRoute extends EasyGraphics {
 
 	public void showRouteMap(int ybase) {
 
+		int x, y;
 		// TODO - START
-		
-		throw new UnsupportedOperationException(TODO.method());
-		
+		setColor(0, 0, 255);
+		for(int i = 0; i < gpspoints.length; i++) {
+			y = ybase - (int)(gpspoints[i].getLatitude() - GPSUtils.findMin(GPSUtils.getLatitudes(gpspoints))* ystep());
+			x = MAPXSIZE - (int)(gpspoints[i].getLongitude() - GPSUtils.findMin(GPSUtils.getLongitudes(gpspoints)) * xstep());
+		fillCircle(x, y, 20);
+		}
 		// TODO - SLUTT
 	}
 
@@ -78,12 +85,19 @@ public class ShowRoute extends EasyGraphics {
 
 		setColor(0,0,0);
 		setFont("Courier",12);
+		String tt = ("Total time:    "+GPSUtils.formatTime(gpscomputer.totalTime()));
+		drawString(tt, TEXTDISTANCE, TEXTDISTANCE);
+		String td = ("Total distance:  "+String.format("%.2f", gpscomputer.totalDistance()/1000.0)+" km");
+		drawString(td, TEXTDISTANCE, TEXTDISTANCE*2);
+		String te = ("Total elevation: "+String.format("%.2f", gpscomputer.totalElevation())+" m");
+		drawString(te, TEXTDISTANCE, TEXTDISTANCE*3);
+		String ms = ("Max speed:       "+String.format("%.2f", gpscomputer.maxSpeed())+" km/t");
+		drawString(ms, TEXTDISTANCE, TEXTDISTANCE*4);
+		String as = ("Average speed:   "+String.format("%.2f", gpscomputer.averageSpeed())+" km/t");
+		drawString(as, TEXTDISTANCE, TEXTDISTANCE*5);
+		String en = ("Energy:          "+String.format("%.2f", gpscomputer.totalKcal(GPSComputer.WEIGHT))+" kcal");
+		drawString(en, TEXTDISTANCE, TEXTDISTANCE*6);
 		
-		// TODO - START
-		
-		throw new UnsupportedOperationException(TODO.method());
-		
-		// TODO - SLUTT;
 	}
 
 }
